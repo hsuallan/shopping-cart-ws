@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="zh-tw">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+  </head>
+  <body style="padding: 0; margin: 0;">
+    <p id="m">Welcome2 😀</p>
+  </body>
+  <script>
+    const p = document.querySelector("#m")
+    const but = document.querySelector("#but")
+    const host = location.origin.replace(/^http/, "ws")
+    let ws = {}
+
+    //wss://bread-web-socket.herokuapp.com/
+    ws.ws = new WebSocket(host)
+    ws.ws.onopen = (e) => {}
+    ws.ws.onclose = (e) => {
+      console.log(e, "close")
+      delete ws.ws
+      setTimeout(() => {
+        ws.ws = new WebSocket(host)
+      }, 1000)
+    }
+
+    ws.ws.onerror = (err) => {
+      console.log(err)
+      delete ws.ws
+      setTimeout(() => {
+        ws.ws = new WebSocket(host)
+      }, 1000)
+    }
+    ws.ws.onmessage = (e) => {
+      p.innerHTML = `get ${e.data}`
+    }
+    window.addEventListener("click", (e) => {
+      console.log(e)
+      p.innerHTML = `${e.screenX},${e.screenY}`
+      ws.ws.send(`${e.screenX},${e.screenY}`)
+    })
+  </script>
+  <style>
+    p {
+      line-height: 160px;
+      text-align: center;
+      font-size: 4.5em;
+    }
+    s {
+      font-size: 0.5em;
+      color: #333;
+    }
+  </style>
+</html>
