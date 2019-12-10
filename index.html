@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Document</title>
   </head>
-  <body style="padding: 0; margin: 0;">
+  <body style="padding: 0; margin: 0; background: #eee;">
     <p id="m">Welcome2 😀</p>
   </body>
   <script>
@@ -14,7 +14,6 @@
     const but = document.querySelector("#but")
     const host = location.origin.replace(/^http/, "ws")
     let ws = {}
-
     //wss://bread-web-socket.herokuapp.com/
     ws.ws = new WebSocket(host)
     ws.ws.onopen = (e) => {}
@@ -34,8 +33,13 @@
       }, 1000)
     }
     ws.ws.onmessage = (e) => {
-      p.innerHTML = `get ${e.data}`
+      if (e != "k") {
+        p.innerHTML = `${e.data}`
+      }
     }
+    window.setInterval(() => {
+      ws.ws.send("k")
+    }, 5000)
     window.addEventListener("click", (e) => {
       console.log(e)
       p.innerHTML = `${e.screenX},${e.screenY}`
@@ -46,11 +50,7 @@
     p {
       line-height: 160px;
       text-align: center;
-      font-size: 4.5em;
-    }
-    s {
-      font-size: 0.5em;
-      color: #333;
+      font-size: 4.5em;  
     }
   </style>
 </html>
